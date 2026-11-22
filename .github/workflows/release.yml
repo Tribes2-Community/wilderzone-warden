@@ -1,0 +1,51 @@
+name: Release
+
+# Builds the VL2 and publishes a GitHub release whenever main contains a version
+# number that has no release yet. The version is $Warden::Version in
+# src/scripts/warden/core.cs - bump it there to ship a new build.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: ver
+        run: |
+          VERSION=$(grep -m1 '^\$Warden::Version' src/scripts/warden/core.cs | sed -E 's/.*"([^"]+)".*/\1/' | tr -d '\r')
+          if ! echo "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+(\.[0-9]+)?$'; then
+            echo "::error::Could not read a version like 1.2 or 1.2.3 from core.cs (got '$VERSION')"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "New version: false (v$VERSION already released)"
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "new=true" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Build VL2
+        if: steps.ver.outputs.new == 'true'
+        run: python3 tools/pack.py
+
+      - name: Publish release
+        if: steps.ver.outputs.new == 'true'
+        run: |
+          gh release create "v${{ steps.ver.outputs.version }}" dist/zz_WilderzoneWarden.vl2 \
+            --target "$GITHUB_SHA" \
+            --title "Wilderzone Warden ${{ steps.ver.outputs.version }}" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}
