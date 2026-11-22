@@ -1,0 +1,3 @@
+# TorqueScript (Tribes 2) uses the .cs extension; GitHub would otherwise treat it as C#.
+# PHP highlighting fits its $globals and %locals better.
+*.cs linguist-language=PHP
