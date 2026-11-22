@@ -88,31 +88,39 @@ d = ImageDraw.Draw(bg)
 d.rounded_rectangle((80, 318, 80 + pw, 318 + 68), radius=10, fill=RED)
 d.text((80 + 28, 318 + 34), pill, font=pill_f, fill=BLACK, anchor="lm")
 
-# ---- feature lines
-body = ImageFont.truetype("C:/Windows/Fonts/segoeuib.ttf", 34)
-small = ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 28)
-lines = [
-    ("Admin console for Tribes 2", WHITE, body),
-    ("Classic and TacoServer", WHITE, body),
-    ("", TEXT, small),
-    ("Players, Match, Bans, Server, Panel", TEXT, small),
-    ("and Log in one window", TEXT, small),
-    ("", TEXT, small),
-    ("Saved per-server admin logins:", TEXT, small),
-    ("nothing typed on stream", TEXT, small),
-    ("", TEXT, small),
-    ("Client-side only: nothing to", TEXT, small),
-    ("install on the server", TEXT, small),
+# ---- tagline + feature rows (icon, title, one line each)
+tag_f = ImageFont.truetype(font_path, 34)
+d.text((84, 404), "ADMIN CONSOLE FOR TRIBES 2", font=tag_f, fill=WHITE)
+d.text((84, 438), "CLASSIC AND TACOSERVER", font=tag_f, fill=WHITE)
+
+title_f = ImageFont.truetype(font_path, 36)
+desc_f = ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 23)
+rows = [
+    ("tab_players", "ONE CONSOLE", "Players, matches, bans, server settings"),
+    ("icon_key", "SAVED LOGINS", "Admin passwords saved per server"),
+    ("icon_refresh", "UPDATE CHECK", "In-game notice of new versions"),
+    ("tab_server", "CLIENT-SIDE", "Nothing to install on the server"),
 ]
-y = 408
-for text, col, f in lines:
-    if text:
-        d.text((84, y), text, font=f, fill=col)
-    y += 40 if f is body else 33
+y = 498
+for i, (icon, head, desc) in enumerate(rows):
+    if i:
+        d.line([(84, y - 12), (608, y - 12)], fill=LINE, width=1)
+    box = Image.new("RGBA", (56, 56), (79, 195, 247, 38))
+    bd = ImageDraw.Draw(box)
+    bd.rectangle((0, 0, 55, 55), outline=BLUE + (160,), width=2)
+    ic = Image.open("src/textures/gui/warden/%s.png" % icon).convert("RGBA").resize((32, 32), Image.LANCZOS)
+    tint = Image.new("RGBA", ic.size, BLUE + (255,))
+    tint.putalpha(ic.getchannel("A"))
+    box.alpha_composite(tint, (12, 12))
+    bg.alpha_composite(box, (84, y))
+    d.text((158, y - 6), head, font=title_f, fill=BLUE)
+    d.text((158, y + 31), desc, font=desc_f, fill=TEXT)
+    y += 80
 
 # ---- footer
 url_f = ImageFont.truetype("C:/Windows/Fonts/segoeui.ttf", 23)
-d.text((84, H - 74), "github.com/Tribes2-Community/wilderzone-warden", font=url_f, fill=BLUE)
+d.line([(84, H - 84), (608, H - 84)], fill=RED, width=2)
+d.text((84, H - 70), "github.com/Tribes2-Community/wilderzone-warden", font=url_f, fill=WHITE)
 
 # ---- screenshot frame
 bx, by, bw, bh = 672, 300, 888, 548
