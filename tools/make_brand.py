@@ -6,7 +6,7 @@ Three-colour scheme, shared with the console skin (profiles.cs):
   red    #FF6060  - WARDEN (the Warden danger colour, "255 96 96")
 
 Usage: python tools/make_brand.py <font.ttf> src/textures/gui/warden
-Font: Squada One (as in the Wilderzone SVG) if you have it, otherwise Impact.
+Font: Squada One (as in the Wilderzone SVG), SquadaOne-Regular.ttf (SIL OFL, github.com/google/fonts).
 """
 import sys
 from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageFilter
@@ -15,6 +15,7 @@ WHITE, BLUE, RED = (255, 255, 255), (79, 195, 247), (255, 96, 96)
 BLACK = (0, 0, 0)
 INK = (14, 18, 23)          # the console frame fill
 SS = 8                      # supersampling
+XSCALE = 0.66               # horizontal squeeze of the title, as in the SVG (0.48 x / 0.82 y)
 
 font_path, out_dir = sys.argv[1], sys.argv[2]
 
@@ -26,30 +27,35 @@ def shear(img, k):
 
 
 def wordmark():
-    W, H = 512 * SS, 32 * SS
-    size = int(21 * SS / 0.74)
+    """256x32, drawn 1:1 in the header: Squada One, italic, condensed, stroke + shadow (as the SVG)."""
+    W, H = 256 * SS, 32 * SS
+    f0 = ImageFont.truetype(font_path, 100)
+    bb0 = f0.getbbox("H")
+    size = int(25 * SS * 100 / (bb0[3] - bb0[1]))
     f = ImageFont.truetype(font_path, size)
     parts = [("WILDER", WHITE), ("ZONE", BLUE), (" ", BLUE), ("WARDEN", RED)]
-    bb = f.getbbox('WILDERZONE WARDEN')
-    x0, y0 = 7 * SS, int(16 * SS - (bb[1] + bb[3]) / 2) + SS
-    stroke = int(2.2 * SS)
+    bb = f.getbbox("WILDERZONE WARDEN")
+    stroke = int(1.8 * SS)
+    big = Image.new("RGBA", (int(f.getlength("WILDERZONE WARDEN")) + 40 * SS, H), (0, 0, 0, 0))
 
     def layer(fill_pass):
-        im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        im = Image.new("RGBA", big.size, (0, 0, 0, 0))
         d = ImageDraw.Draw(im)
-        x = x0
+        x = 8 * SS
         for text, col in parts:
-            d.text((x, y0), text, font=f, fill=col if fill_pass else BLACK,
-                   stroke_width=stroke, stroke_fill=BLACK)
-            x += f.getlength(text) + 1.5 * SS
+            d.text((x, int(16 * SS - (bb0[1] + bb0[3]) / 2 * size / 100) ), text, font=f,
+                   fill=col if fill_pass else BLACK, stroke_width=stroke, stroke_fill=BLACK)
+            x += f.getlength(text)
         return im
 
-    base = layer(True)
-    shadow = layer(False).filter(ImageFilter.GaussianBlur(1.6 * SS))
-    shadow = ImageChops_offset(shadow, 0, int(1.6 * SS))
-    out = Image.alpha_composite(shadow, base)
-    out = shear(out, 0.16).crop((0, 0, W, H))
-    return out.resize((512, 32), Image.LANCZOS)
+    shadow = ImageChops_offset(layer(False).filter(ImageFilter.GaussianBlur(1.4 * SS)), 0, int(1.4 * SS))
+    out = Image.alpha_composite(shadow, layer(True))
+    out = out.resize((int(out.width * XSCALE), out.height), Image.LANCZOS)   # the SVG's condensed look
+    out = shear(out, 0.16)
+    out = out.crop((0, 0, min(out.width, W), H))
+    canvas = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    canvas.alpha_composite(out)
+    return canvas.resize((256, 32), Image.LANCZOS)
 
 
 def ImageChops_offset(im, dx, dy):
@@ -91,7 +97,7 @@ def logo():
     d.polygon([(cx - S * .22, S * .60), (cx, S * .76), (cx + S * .22, S * .60),
                (cx + S * .22, S * .67), (cx, S * .83), (cx - S * .22, S * .67)], fill=RED)
     # "WZ" in the title style: W white (WILDER), Z blue (ZONE), italic, black stroke, drop shadow
-    f = ImageFont.truetype(font_path, int(S * 0.50))
+    f = ImageFont.truetype(font_path, int(S * 0.62))
     st = int(S * 0.028)
     wl, zl = f.getlength("W"), f.getlength("Z")
     bb = f.getbbox("WZ")

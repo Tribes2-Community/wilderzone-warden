@@ -3,7 +3,7 @@
 // the server-message log.
 //------------------------------------------------------------------------------
 
-$Warden::Version = "1.1";
+$Warden::Version = "1.2";
 $Warden::Tab = 0;
 $Warden::Open = false;
 $Warden::LogMax = 150;
@@ -392,7 +392,7 @@ function wardenLogClear()
 //------------------------------------------------------------------------------
 // About: credit for the console. Edit $Warden::Author to name the author(s).
 
-$Warden::Author = "GeekOfWires, with Claude Opus 5.5 and Claude Sonnet 5.5";
+$Warden::Author = "GeekOfWires";
 
 function wardenAboutEnter()
 {
@@ -404,7 +404,7 @@ function wardenAboutEnter()
    %text = %text @ "<color:D2DCE8>Tribes 2, by Dynamix. The console is client-side only and uses the commands and menus the server already offers, ";
    %text = %text @ "including the admin commands of Classic (z0dd's Admin Hud) and TacoServer's Server Admin Panel." @ %nl @ %nl;
    %text = %text @ "<color:FF6060>ARTWORK" @ %nl;
-   %text = %text @ "<color:D2DCE8>Logo, wordmark and icons are drawn from primitives for this console. The wordmark follows the Wilderzone title style." @ %nl @ %nl;
+   %text = %text @ "<color:D2DCE8>Logo, wordmark and icons are drawn from primitives for this console. The wordmark follows the Wilderzone title style, set in Squada One (SIL Open Font License)." @ %nl @ %nl;
    %text = %text @ "<color:7E8A99>Nothing here is installed on the server: what you can do depends on the rank the server gives you.";
    WdnAboutText.setText( %text );
 }

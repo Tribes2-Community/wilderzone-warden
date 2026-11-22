@@ -393,9 +393,9 @@ function wardenLayout()
    // Header.
    wdnPlace( WdnHeader, 1, 1, %W - 2, 46 );
    wdnPlace( WdnLogo, 10, 5, 36, 36 );
-   // The wordmark bitmap is 512x32; shown at 5/8 size, or half size in a narrow window.
-   %wm = %W >= 800 ? 320 : 256;
-   wdnPlace( WdnWordmark, 54, %W >= 800 ? 13 : 15, %wm, %wm / 16 );
+   // The wordmark bitmap is 256x32, shown 1:1.
+   %wm = 256;
+   wdnPlace( WdnWordmark, 54, 7, %wm, 32 );
    %sx = %W - 420;
    if ( %sx < 54 + %wm + 8 )
       %sx = 54 + %wm + 8;
@@ -589,12 +589,12 @@ function wardenLayoutLog( %CW, %CH )
 //------------------------------------------------------------------------------
 function wardenLayoutAbout( %CW, %CH )
 {
-   %w = wdnClamp( %CW, 400, 640 );
+   %w = %CW;
    wdnPlace( WdnAboutCard, 0, 0, %w, %CH );
    wdnPlace( WdnAboutLogo, 16, 14, 56, 56 );
-   // The wordmark bitmap is 512x32; its text fills roughly the left half.
-   wdnPlace( WdnAboutWordmark, 84, 24, 384, 24 );
-   wdnPlace( WdnAboutVersion, 86, 52, %w - 100, 16 );
+   // The wordmark bitmap is 256x32, shown 1:1.
+   wdnPlace( WdnAboutWordmark, 84, 16, 256, 32 );
+   wdnPlace( WdnAboutVersion, 86, 54, %w - 100, 16 );
    wdnPlace( WdnAboutTop, 1, 1, %w - 2, 2 );
    wdnPlace( WdnAboutLine, 1, 82, %w - 2, 1 );
    wdnPlace( WdnAboutText, 16, 94, %w - 32, %CH - 94 - 52 );

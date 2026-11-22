@@ -73,7 +73,7 @@ Python 3 is all you need to build the VL2:
 python tools/pack.py        # writes dist/zz_WilderzoneWarden.vl2
 ```
 
-Optional: `python tools/make_brand.py <font.ttf> src/textures/gui/warden` redraws the logo, wordmark
+Optional: `python tools/make_brand.py <SquadaOne-Regular.ttf> src/textures/gui/warden` redraws the logo, wordmark
 and About icon (needs [Pillow](https://python-pillow.org/)). They are drawn from primitives in the
 Wilderzone title style: white WILDER, blue ZONE, red WARDEN. [`assets/wilderzone_warden.svg`](assets/wilderzone_warden.svg)
 is the same title as vector art.
@@ -99,6 +99,9 @@ That release is also what the in-game update check looks for.
 
 Created by [GeekOfWires](https://github.com/GeekOfWires), with co-authors Claude Opus 5.5 and
 Claude Sonnet 5.5 (Anthropic).
+
+The wordmark is set in [Squada One](https://fonts.google.com/specimen/Squada+One) (SIL Open Font
+License), matching `assets/wilderzone_warden.svg`.
 
 Built on Tribes 2 by Dynamix, the admin commands of Classic (z0dd's Admin Hud) and TacoServer's
 Server Admin Panel.

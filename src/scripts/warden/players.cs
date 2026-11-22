@@ -232,10 +232,12 @@ function wardenRenderActions()
             wdnSetStyle( %btn, WdnBtnDangerProfile );
          else
             wdnSetStyle( %btn, WdnBtnProfile );
-         wdnSetCaption( %btn, wardenActionLabel( $Warden::ActionText[%i] ) );
+         %label = wardenActionLabel( $Warden::ActionText[%i] );
+         wdnSetCaption( %btn, %label );
          %icon.setBitmap( "gui/warden/" @ %bitmap );
          wdnShowButton( %btn, true );
-         %icon.setVisible( $Warden::ActionIcons );
+         // A long caption would run over its icon: drop the icon for those.
+         %icon.setVisible( $Warden::ActionIcons && strlen( %label ) <= 16 );
       }
       else
       {
