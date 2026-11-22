@@ -102,6 +102,7 @@ function wardenOpen()
 
    wardenBuildGui();
    Canvas.pushDialog( WardenDlg );
+   wardenUpdateAuto();
 }
 
 function wardenClose()
@@ -388,7 +389,7 @@ $Warden::Author = "GeekOfWires, with Claude Opus 5.5 and Claude Sonnet 5.5";
 
 function wardenAboutEnter()
 {
-   WdnAboutVersion.setText( "Version " @ $Warden::Version @ "  -  admin console for Tribes 2 Classic and TacoServer" );
+   wardenUpdateShow();
    %nl = "\n";
    %text = "<color:FF6060>CREDIT" @ %nl;
    %text = %text @ "<color:D2DCE8>Wilderzone Warden was made for the Wilderzone community by " @ $Warden::Author @ "." @ %nl @ %nl;

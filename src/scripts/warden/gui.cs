@@ -318,6 +318,8 @@ function wardenBuildAboutPage( %page )
    WdnAboutCard.add( wdnText( WdnAboutVersion, "WdnTextDimProfile", "" ) );
    WdnAboutCard.add( wdnBox( WdnAboutLine, "WdnLineProfile" ) );
    WdnAboutCard.add( wdnML( WdnAboutText ) );
+   WdnAboutCard.add( wdnButton( WdnAboutUpdateBtn, "WdnBtnPrimaryProfile", "CHECK FOR UPDATES", "wardenUpdateButton();" ) );
+   WdnAboutCard.add( wdnIcon( WdnAboutUpdateIcon, "icon_refresh" ) );
    WdnAboutCard.add( wdnBox( WdnAboutTop, "WdnRedLineProfile" ) );
 }
 
@@ -578,7 +580,8 @@ function wardenLayoutAbout( %CW, %CH )
    wdnPlace( WdnAboutVersion, 86, 52, %w - 100, 16 );
    wdnPlace( WdnAboutTop, 1, 1, %w - 2, 2 );
    wdnPlace( WdnAboutLine, 1, 82, %w - 2, 1 );
-   wdnPlace( WdnAboutText, 16, 94, %w - 32, %CH - 94 - 10 );
+   wdnPlace( WdnAboutText, 16, 94, %w - 32, %CH - 94 - 52 );
+   wdnPlaceBtn( WdnAboutUpdateBtn, WdnAboutUpdateIcon, 16, %CH - 40, 220, 28 );
 }
 
 //------------------------------------------------------------------------------

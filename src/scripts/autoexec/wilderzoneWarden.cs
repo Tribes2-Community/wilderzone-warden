@@ -17,5 +17,6 @@ if ( !$Warden::Loaded && $LaunchMode !$= "DedicatedServer" )
    exec( "scripts/warden/match.cs" );
    exec( "scripts/warden/panel.cs" );
    exec( "scripts/warden/server.cs" );
+   exec( "scripts/warden/update.cs" );
    exec( "scripts/warden/core.cs" );
 }
