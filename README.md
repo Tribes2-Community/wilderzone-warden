@@ -8,13 +8,28 @@
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-FF6060"></a>
 </p>
 
-An admin and super-admin console for **Tribes 2** servers running **Classic (1.5.2)** and
-**TacoServer**. Press **Ctrl-F9** in a game and get players, match controls, bans, server settings,
-TacoServer's admin panel and a message log in one window.
+<p align="center">
+  An admin and super-admin console for <b>Tribes 2</b> servers running <b>Classic (1.5.2)</b> and <b>TacoServer</b>.<br>
+  Press <b>Ctrl-F9</b> in a game: players, match controls, bans, server settings and a message log in one window.
+</p>
+
+<p align="center">
+  <img src="docs/screenshots/players.png" alt="The Players tab" width="820">
+</p>
 
 It is a single VL2 that runs on your client. **Nothing is installed on the server:** everything the
 console does goes through commands and menus the server already offers, so what you can do is exactly
 what your rank allows there.
+
+## Highlights
+
+- **Players:** rank, team, score and ping at a glance, and one-click kick, ban, warn, gag, freeze, team
+  change and more, limited to what the server lets your rank do. Destructive actions ask for a second click.
+- **Match:** the server's own vote/admin menu as a list: change mission, time limit, tournament mode, skip.
+- **Saved logins:** keep your Admin and Super Admin passwords per server and elevate with one click,
+  without typing or showing a password on stream.
+- **TacoServer tools:** ban list with Unban / Make permanent, and the Server Admin Panel inside the console.
+- **Update check:** tells you in-game when a new version is out (QOL clients).
 
 ## Install
 
@@ -26,22 +41,35 @@ what your rank allows there.
 To change or remove the Ctrl-F9 binding, set `$pref::Warden::GlobalKey` in the client console
 (for example `$pref::Warden::GlobalKey = "ctrl f10";`, or `""` for none) and restart.
 
-## What's in it
+## Tabs
 
 | Tab | What it does | Works on |
 |---|---|---|
-| **Players** | Player list with rank, team, score and ping. Select a player for the actions the server offers you: kick, ban, warn, gag, freeze, mute, team change, observer, admin changes, private message, client info. Destructive actions need a confirming second click. | Any server (Classic adds extended actions) |
-| **Match** | The server's vote/admin menu as a list: change mission, time limit, skip, tournament mode, team damage and more, with a filter for long mission lists. | Any server |
+| **Players** | Player list with rank, team, score and ping. Select a player for the actions the server offers you: kick, ban, warn, gag, freeze, mute, team change, observer, admin changes, private message, client info. | Any server (Classic adds extended actions) |
+| **Match** | The server's vote/admin menu as a list, with a filter for long mission lists. | Any server |
 | **Bans** | TacoServer's ban/kick list with time left, **Unban** and **Make permanent**. | TacoServer, Super Admin |
-| **Server** | Admin login with **saved per-server passwords**, centre/bottom-print broadcast, and Classic's super-admin settings (passwords, player limit, teams, auto-password, rotation, restart). Password fields are masked. | Classic |
+| **Server** | Admin login with saved per-server passwords, centre/bottom-print broadcast, and Classic's super-admin settings (passwords, player limit, teams, auto-password, rotation, restart). Password fields are masked. | Classic |
 | **Panel** | TacoServer's Server Admin Panel (whitelist, auth queue, IP bans, team balancer, stats) with working links. | TacoServer, Super Admin |
 | **Log** | Every server message with text, time-stamped. | Any server |
-| **About** | Version, credit, and the update check. | Any server |
+| **About** | Version, update check, credit. | Any server |
 
 How each tab talks to the server, and the known limits (all server-side), are written up in
 [`src/WilderzoneWarden_readme.txt`](src/WilderzoneWarden_readme.txt).
 
-## Saved logins
+### Match
+
+The vote/admin menu is whatever your server offers your rank. Multi-step choices (mission, time limit,
+team) continue in the same list.
+
+<p align="center">
+  <img src="docs/screenshots/match.png" alt="The Match tab" width="820">
+</p>
+
+### Server and saved logins
+
+<p align="center">
+  <img src="docs/screenshots/server.png" alt="The Server tab, with saved logins" width="820">
+</p>
 
 On the **Server** tab you can store your Admin and Super Admin passwords **per server**, so you can
 elevate with one click without typing, or showing, a password while streaming.
@@ -55,11 +83,23 @@ address is unknown the console says so and saves nothing). They are kept in your
 **plain text**, so do not share that file. Nothing is ever sent automatically; it only happens when you
 press USE ADMIN or USE SUPER.
 
+### Log
+
+<p align="center">
+  <img src="docs/screenshots/log.png" alt="The Log tab" width="820">
+</p>
+
+<sub>Screenshots are from a local test game with bots.</sub>
+
 ## Updates
 
 When you first open the console in a session it checks GitHub for a newer release. The **About** tab
-shows **Up to Date - 1.1** (with your version) when you are current. If there is a newer one, it and the
+shows **Up to Date - 1.2** (with your version) when you are current. If there is a newer one, it and the
 **Log** say so, and the **GET UPDATE** button opens the releases page.
+
+<p align="center">
+  <img src="docs/screenshots/about.png" alt="The About tab" width="820">
+</p>
 
 The check needs a client whose `HTTPObject` supports HTTPS, such as the **QOL** client. On other
 clients it reports that GitHub could not be reached, and the button simply opens the releases page.
@@ -73,8 +113,8 @@ Python 3 is all you need to build the VL2:
 python tools/pack.py        # writes dist/zz_WilderzoneWarden.vl2
 ```
 
-Optional: `python tools/make_brand.py <SquadaOne-Regular.ttf> src/textures/gui/warden` redraws the logo, wordmark
-and About icon (needs [Pillow](https://python-pillow.org/)). They are drawn from primitives in the
+Optional: `python tools/make_brand.py <SquadaOne-Regular.ttf> src/textures/gui/warden` redraws the logo,
+wordmark and About icon (needs [Pillow](https://python-pillow.org/)). They are drawn from primitives in the
 Wilderzone title style: white WILDER, blue ZONE, red WARDEN. [`assets/wilderzone_warden.svg`](assets/wilderzone_warden.svg)
 is the same title as vector art.
 
@@ -83,7 +123,8 @@ src/scripts/autoexec/    loader
 src/scripts/warden/      profiles (skin), gui, core, players, match, panel, server, update
 src/textures/gui/warden/ bitmaps
 assets/                  title artwork
-tools/                   pack.py, make_brand.py
+docs/screenshots/        screenshots used in this README
+tools/                   pack.py, make_brand.py, make_banner.py
 .github/workflows/       release workflow
 ```
 
@@ -91,8 +132,8 @@ tools/                   pack.py, make_brand.py
 
 The version lives in one place: `$Warden::Version` in
 [`src/scripts/warden/core.cs`](src/scripts/warden/core.cs). To ship a build, bump it (for example to
-`"1.1"`) and push to `main`. The [Release workflow](.github/workflows/release.yml) builds the VL2 and
-publishes a `v1.1` release with it attached. A push that does not change the version builds nothing.
+`"1.3"`) and push to `main`. The [Release workflow](.github/workflows/release.yml) builds the VL2 and
+publishes a `v1.3` release with it attached. A push that does not change the version builds nothing.
 That release is also what the in-game update check looks for.
 
 ## Credits
