@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 108" width="560" height="108">
+  <defs>
+    <style>
+      .t2-brand-title {
+        font-family: 'Squada One', 'Impact', 'Arial Black', sans-serif;
+      }
+    </style>
+  </defs>
+
+  <!-- Wilderzone Warden: same title block as wilderzone_vtwelve.svg, VTWELVE -> WARDEN,
+       footer removed, canvas tightened. Three colours, all from the Warden console skin:
+       white (WILDER), blue #4FC3F7 (ZONE), red #FF6060 (WARDEN). -->
+  <g transform="translate(280, 88) scale(0.5, 0.82)">
+    <text x="0" y="0"
+          class="t2-brand-title"
+          font-size="124"
+          font-style="italic"
+          letter-spacing="2"
+          text-anchor="middle"
+          stroke="#000000"
+          stroke-width="6"
+          stroke-linejoin="miter"
+          style="paint-order: stroke fill; filter: drop-shadow(0px 5px 4px rgba(0,0,0,1));">
+      <tspan fill="#FFFFFF">WILDER</tspan><tspan fill="#4FC3F7">ZONE</tspan> <tspan fill="#FF6060">WARDEN</tspan>
+    </text>
+  </g>
+</svg>
