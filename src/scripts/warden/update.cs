@@ -132,11 +132,11 @@ function wardenUpdateText()
       case "checking":
          return "Checking GitHub for updates...";
       case "current":
-         return "You have the latest version.";
+         return "Up to Date - " @ $Warden::Version;
       case "newer":
-         return "Version " @ $Warden::UpdateLatest @ " is available.";
+         return "Update available - " @ $Warden::UpdateLatest;
       case "failed":
-         return "Could not reach GitHub (the update check needs a client with HTTPS support, such as QOL).";
+         return "Update check unavailable - it needs a client with HTTPS support, such as QOL";
    }
    return "";
 }
@@ -147,10 +147,14 @@ function wardenUpdateShow()
    if ( !isObject( WdnAboutVersion ) )
       return;
 
-   %line = "Version " @ $Warden::Version;
+   // "Up to Date - 1.1" already names the version; the other states add it in front.
    %text = wardenUpdateText();
-   if ( %text !$= "" )
-      %line = %line @ "  -  " @ %text;
+   if ( $Warden::UpdateState $= "current" )
+      %line = %text;
+   else if ( %text !$= "" )
+      %line = "Version " @ $Warden::Version @ "  -  " @ %text;
+   else
+      %line = "Version " @ $Warden::Version;
    WdnAboutVersion.setText( %line );
 
    switch$ ( $Warden::UpdateState )

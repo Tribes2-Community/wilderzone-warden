@@ -48,6 +48,7 @@ function wardenServerEnter()
       WdnSetList.setSelectedById( 0 );
    }
    wardenSettingShow();
+   wardenSavedShow();
 }
 
 function WdnSetList::onSelect( %this, %id, %text )
@@ -135,6 +136,115 @@ function wardenLogin()
    wardenSetStatus( "Password sent." );
    // The rank change, if any, comes back as a message; show it when it lands.
    schedule( 800, 0, wardenUpdateHeader );
+}
+
+//------------------------------------------------------------------------------
+// Saved logins.
+//
+// Admin and Super Admin passwords can be kept per server, so a player can
+// elevate with one click and never type (or show) the password on stream. They
+// are stored in the client's prefs, keyed by the address the game joined; they
+// are only ever sent to that address, and only when USE ADMIN / USE SUPER is
+// pressed. The prefs file holds them as plain text.
+
+// The joined server's address as a variable-name-safe key, or "" if unknown.
+function wardenServerKey()
+{
+   %key = $Warden::ServerAddress;
+   if ( %key $= "" )
+      return "";
+
+   %key = strreplace( %key, ".", "_" );
+   %key = strreplace( %key, ":", "_" );
+   %key = strreplace( %key, "[", "_" );
+   %key = strreplace( %key, "]", "_" );
+   %key = strreplace( %key, "-", "_" );
+   %key = strreplace( %key, "/", "_" );
+   %key = strreplace( %key, " ", "_" );
+   return %key;
+}
+
+// %kind is "A" (Admin) or "S" (Super Admin).
+function wardenSavedGet( %kind )
+{
+   %key = wardenServerKey();
+   if ( %key $= "" )
+      return "";
+   return $pref::Warden::Pw[%kind @ "_" @ %key];
+}
+
+function wardenKindName( %kind )
+{
+   return %kind $= "S" ? "Super Admin" : "Admin";
+}
+
+function wardenSavedShow()
+{
+   if ( !isObject( WdnSavedText ) )
+      return;
+
+   if ( wardenServerKey() $= "" )
+   {
+      WdnSavedText.setText( "Saved logins need the server's address: join it from the server list." );
+      return;
+   }
+
+   WdnSavedText.setText( "Saved for this server:  Admin " @ ( wardenSavedGet( "A" ) $= "" ? "no" : "YES" )
+         @ "   Super Admin " @ ( wardenSavedGet( "S" ) $= "" ? "no" : "YES" ) );
+}
+
+function wardenSavePassword( %kind )
+{
+   %key = wardenServerKey();
+   if ( %key $= "" )
+   {
+      wardenSetStatus( "Cannot save: the server's address is unknown. Join it from the server list." );
+      return;
+   }
+
+   %password = WdnAuthEdit.getValue();
+   if ( %password $= "" )
+   {
+      wardenSetStatus( "Type the " @ wardenKindName( %kind ) @ " password in the box first." );
+      return;
+   }
+
+   $pref::Warden::Pw[%kind @ "_" @ %key] = %password;
+   WdnAuthEdit.setValue( "" );
+   wardenLogAdd( wardenKindName( %kind ) @ " password saved for this server." );
+   wardenSavedShow();
+}
+
+function wardenLoginSaved( %kind )
+{
+   %password = wardenSavedGet( %kind );
+   if ( %password $= "" )
+   {
+      wardenSetStatus( "No " @ wardenKindName( %kind ) @ " password saved for this server." );
+      return;
+   }
+
+   commandToServer( 'SAD', %password );
+   wardenLogAdd( "Logged in with the saved " @ wardenKindName( %kind ) @ " password." );
+   schedule( 800, 0, wardenUpdateHeader );
+}
+
+function wardenForgetSaved()
+{
+   %key = wardenServerKey();
+   if ( %key $= "" || ( wardenSavedGet( "A" ) $= "" && wardenSavedGet( "S" ) $= "" ) )
+   {
+      wardenSetStatus( "Nothing saved for this server." );
+      return;
+   }
+
+   if ( !wardenArm( WdnForgetBtn, "CONFIRM?", "FORGET SAVED", WdnBtnDangerProfile ) )
+      return;
+
+   $pref::Warden::Pw["A_" @ %key] = "";
+   $pref::Warden::Pw["S_" @ %key] = "";
+   wardenLogAdd( "Saved passwords for this server removed." );
+   wardenSavedShow();
 }
 
 function wardenBroadcast( %bottom )

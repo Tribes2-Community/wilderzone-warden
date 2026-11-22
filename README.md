@@ -33,7 +33,7 @@ To change or remove the Ctrl-F9 binding, set `$pref::Warden::GlobalKey` in the c
 | **Players** | Player list with rank, team, score and ping. Select a player for the actions the server offers you: kick, ban, warn, gag, freeze, mute, team change, observer, admin changes, private message, client info. Destructive actions need a confirming second click. | Any server (Classic adds extended actions) |
 | **Match** | The server's vote/admin menu as a list: change mission, time limit, skip, tournament mode, team damage and more, with a filter for long mission lists. | Any server |
 | **Bans** | TacoServer's ban/kick list with time left, **Unban** and **Make permanent**. | TacoServer, Super Admin |
-| **Server** | Admin login, centre/bottom-print broadcast, and Classic's super-admin settings (passwords, player limit, teams, auto-password, rotation, restart). Password fields are masked. | Classic |
+| **Server** | Admin login with **saved per-server passwords**, centre/bottom-print broadcast, and Classic's super-admin settings (passwords, player limit, teams, auto-password, rotation, restart). Password fields are masked. | Classic |
 | **Panel** | TacoServer's Server Admin Panel (whitelist, auth queue, IP bans, team balancer, stats) with working links. | TacoServer, Super Admin |
 | **Log** | Every server message with text, time-stamped. | Any server |
 | **About** | Version, credit, and the update check. | Any server |
@@ -41,10 +41,25 @@ To change or remove the Ctrl-F9 binding, set `$pref::Warden::GlobalKey` in the c
 How each tab talks to the server, and the known limits (all server-side), are written up in
 [`src/WilderzoneWarden_readme.txt`](src/WilderzoneWarden_readme.txt).
 
+## Saved logins
+
+On the **Server** tab you can store your Admin and Super Admin passwords **per server**, so you can
+elevate with one click without typing, or showing, a password while streaming.
+
+1. Type the password in the (masked) login box and press **SAVE ADMIN** or **SAVE SUPER**.
+2. Next time, press **USE ADMIN** or **USE SUPER**. The saved password is sent only to that server.
+3. **FORGET SAVED** (with a confirming second click) removes both for the server you are on.
+
+Notes: passwords are keyed by the server address the game joined, so join from the server list (if the
+address is unknown the console says so and saves nothing). They are kept in your client prefs file in
+**plain text**, so do not share that file. Nothing is ever sent automatically; it only happens when you
+press USE ADMIN or USE SUPER.
+
 ## Updates
 
-When you first open the console in a session it checks GitHub for a newer release. If there is one,
-the **About** tab and the **Log** say so, and the **GET UPDATE** button opens the releases page.
+When you first open the console in a session it checks GitHub for a newer release. The **About** tab
+shows **Up to Date - 1.1** (with your version) when you are current. If there is a newer one, it and the
+**Log** say so, and the **GET UPDATE** button opens the releases page.
 
 The check needs a client whose `HTTPObject` supports HTTPS, such as the **QOL** client. On other
 clients it reports that GitHub could not be reached, and the button simply opens the releases page.

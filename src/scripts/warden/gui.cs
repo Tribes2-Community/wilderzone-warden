@@ -264,10 +264,21 @@ function wardenBuildServerPage( %page )
 {
    %page.add( wdnBox( WdnSrvLeft, "WdnPanelProfile" ) );
    WdnSrvLeft.add( wdnText( WdnAuthLabel, "WdnLabelProfile", "ADMIN LOGIN" ) );
-   WdnSrvLeft.add( wdnText( WdnAuthHint, "WdnTextDimProfile", "Admin or Super Admin password" ) );
+   WdnSrvLeft.add( wdnText( WdnAuthHint, "WdnTextDimProfile", "Type a password to log in, or save it for this server" ) );
    WdnSrvLeft.add( wdnEdit( WdnAuthEdit, "", "wardenLogin();", "1" ) );
    WdnSrvLeft.add( wdnButton( WdnAuthBtn, "WdnBtnPrimaryProfile", "LOG IN", "wardenLogin();" ) );
    WdnSrvLeft.add( wdnIcon( WdnAuthIcon, "icon_key" ) );
+   WdnSrvLeft.add( wdnButton( WdnSaveAdminBtn, "WdnBtnProfile", "SAVE ADMIN", "wardenSavePassword(\"A\");" ) );
+   WdnSrvLeft.add( wdnIcon( WdnSaveAdminIcon, "icon_apply" ) );
+   WdnSrvLeft.add( wdnButton( WdnSaveSuperBtn, "WdnBtnProfile", "SAVE SUPER", "wardenSavePassword(\"S\");" ) );
+   WdnSrvLeft.add( wdnIcon( WdnSaveSuperIcon, "icon_apply" ) );
+   WdnSrvLeft.add( wdnText( WdnSavedText, "WdnTextDimProfile", "" ) );
+   WdnSrvLeft.add( wdnButton( WdnUseAdminBtn, "WdnBtnPrimaryProfile", "USE ADMIN", "wardenLoginSaved(\"A\");" ) );
+   WdnSrvLeft.add( wdnIcon( WdnUseAdminIcon, "icon_key" ) );
+   WdnSrvLeft.add( wdnButton( WdnUseSuperBtn, "WdnBtnPrimaryProfile", "USE SUPER", "wardenLoginSaved(\"S\");" ) );
+   WdnSrvLeft.add( wdnIcon( WdnUseSuperIcon, "icon_super" ) );
+   WdnSrvLeft.add( wdnButton( WdnForgetBtn, "WdnBtnDangerProfile", "FORGET SAVED", "wardenForgetSaved();" ) );
+   WdnSrvLeft.add( wdnIcon( WdnForgetIcon, "icon_strip" ) );
    WdnSrvLeft.add( wdnBox( WdnSrvLine, "WdnLineProfile" ) );
    WdnSrvLeft.add( wdnText( WdnCastLabel, "WdnLabelProfile", "BROADCAST TO ALL PLAYERS" ) );
    WdnSrvLeft.add( wdnEdit( WdnCastEdit, "", "wardenBroadcast(0);", "0" ) );
@@ -530,12 +541,18 @@ function wardenLayoutServer( %CW, %CH )
    wdnPlace( WdnAuthHint, 12, 28, %LW - 24, 16 );
    wdnPlace( WdnAuthEdit, 12, 48, %LW - 24 - 106, 26 );
    wdnPlaceBtn( WdnAuthBtn, WdnAuthIcon, %LW - 112, 48, 100, 26 );
-   wdnPlace( WdnSrvLine, 1, 88, %LW - 2, 1 );
-   wdnPlace( WdnCastLabel, 12, 98, %LW - 24, 18 );
-   wdnPlace( WdnCastEdit, 12, 120, %LW - 24, 26 );
    %bw = mFloor( ( %LW - 24 - 6 ) / 2 );
-   wdnPlaceBtn( WdnCastCenterBtn, WdnCastCenterIcon, 12, 152, %bw, 26 );
-   wdnPlaceBtn( WdnCastBottomBtn, WdnCastBottomIcon, 12 + %bw + 6, 152, %bw, 26 );
+   wdnPlaceBtn( WdnSaveAdminBtn, WdnSaveAdminIcon, 12, 80, %bw, 26 );
+   wdnPlaceBtn( WdnSaveSuperBtn, WdnSaveSuperIcon, 12 + %bw + 6, 80, %bw, 26 );
+   wdnPlace( WdnSavedText, 12, 112, %LW - 24, 16 );
+   wdnPlaceBtn( WdnUseAdminBtn, WdnUseAdminIcon, 12, 132, %bw, 26 );
+   wdnPlaceBtn( WdnUseSuperBtn, WdnUseSuperIcon, 12 + %bw + 6, 132, %bw, 26 );
+   wdnPlaceBtn( WdnForgetBtn, WdnForgetIcon, 12, 164, %LW - 24, 26 );
+   wdnPlace( WdnSrvLine, 1, 202, %LW - 2, 1 );
+   wdnPlace( WdnCastLabel, 12, 212, %LW - 24, 18 );
+   wdnPlace( WdnCastEdit, 12, 234, %LW - 24, 26 );
+   wdnPlaceBtn( WdnCastCenterBtn, WdnCastCenterIcon, 12, 266, %bw, 26 );
+   wdnPlaceBtn( WdnCastBottomBtn, WdnCastBottomIcon, 12 + %bw + 6, 266, %bw, 26 );
 
    wdnPlace( WdnSrvRight, %LW + 10, 0, %RW, %CH );
    wdnPlace( WdnSetLabel, 12, 8, %RW - 24, 18 );

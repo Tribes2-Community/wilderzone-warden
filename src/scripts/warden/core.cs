@@ -3,7 +3,7 @@
 // the server-message log.
 //------------------------------------------------------------------------------
 
-$Warden::Version = "1.0";
+$Warden::Version = "1.1";
 $Warden::Tab = 0;
 $Warden::Open = false;
 $Warden::LogMax = 150;
@@ -59,6 +59,13 @@ package WardenAdmin
       if ( %masked !$= "" )
          %msgString = %masked;
       Parent::clientCmdServerMessage( %msgType, %msgString, %a1, %a2, %a3, %a4, %a5, %a6, %a7, %a8, %a9, %a10 );
+   }
+
+   // Remember which server is being joined: saved logins are kept per server address.
+   function JoinGame( %address )
+   {
+      $Warden::ServerAddress = %address;
+      Parent::JoinGame( %address );
    }
 
    // Leaving the server: forget everything tied to that connection.
@@ -406,6 +413,7 @@ function wardenAboutEnter()
 function wardenResetSession()
 {
    $Warden::Self = 0;
+   $Warden::ServerAddress = "";
    $Warden::SelectedClient = "";
    $Warden::LogCount = 0;
    $Warden::LogHead = 0;
